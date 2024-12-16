@@ -102,7 +102,13 @@ def send_notification():
         ),
         topic="all_users",  # Broadcast to all users
     )
-    messaging.send(message)
+    # This sends the notification to all users who are subscribed to the "all_users" topic
+    try:
+        response = messaging.send(message)
+        print(f"Successfully sent message: {response}")
+    except Exception as e:
+        print(f"Error sending message: {e}")
+
 
 
 # Schedule notifications (using APScheduler)

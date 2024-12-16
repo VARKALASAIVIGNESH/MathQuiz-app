@@ -3,10 +3,12 @@ from firebase_admin import credentials, initialize_app, messaging
 import random
 from apscheduler.schedulers.background import BackgroundScheduler
 import os
-from flask_cors import CORS
-CORS(app)
+from flask_cors import CORS  # Import CORS after Flask
 
 app = Flask(__name__)
+
+# Enable CORS for your app
+CORS(app)  # This line should come after the app definition
 
 # Initialize Firebase Admin SDK
 cred = credentials.Certificate("FCM.json")  # Replace with your actual Firebase credentials file

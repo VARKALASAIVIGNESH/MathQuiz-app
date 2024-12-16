@@ -3,6 +3,8 @@ from firebase_admin import credentials, initialize_app, messaging
 import random
 from apscheduler.schedulers.background import BackgroundScheduler
 import os
+from flask_cors import CORS
+CORS(app)
 
 app = Flask(__name__)
 

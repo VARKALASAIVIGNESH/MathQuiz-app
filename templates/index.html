@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        input[type="number"] {
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+            text-align: center;
+        }
+        p {
+            font-size: 1.2em;
+            color: #555;
+        }
+        #scoreDisplay {
+            font-size: 1.5em;
+            margin-top: 20px;
+            color: #4CAF50;
+        }
+    </style>
+    
+    
+</head>
+<body>
+    <h1>Math Quiz</h1>
+    
+    <!-- Button to get a new question -->
+    <button id="getQuestion">Get New Question</button>
+    
+    <!-- Display the math question -->
+    <p id="questionDisplay"></p>
+
+    <!-- Input to submit the answer -->
+    <input type="number" id="answer" placeholder="Enter your answer">
+    <button id="submitAnswer">Submit Answer</button>
+
+    <p id="scoreDisplay">Score: 0</p>
+    <script>
+        let userScore = 0;
+        let currentQuestion = "";
+
+        // Get a new question
+        document.getElementById('getQuestion').onclick = async () => {
+            const response = await fetch('http://127.0.0.1:5000/generate-question', {
+                method: 'POST',
+            });
+            const data = await response.json();
+            currentQuestion = data.question;
+            document.getElementById('questionDisplay').innerText = `Question: ${currentQuestion}`;
+        };
+
+        // Submit an answer
+        document.getElementById('submitAnswer').onclick = async () => {
+            const answer = document.getElementById('answer').value;
+
+            if (!answer) {
+                alert('Please enter an answer');
+                return;
+            }
+
+            const response = await fetch('http://127.0.0.1:5000/submit-answer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user: 'user1',  // For simplicity, hardcoding user as 'user1'
+                    question: currentQuestion,
+                    answer: answer
+                })
+            });
+
+            const data = await response.json();
+            if (data.correct) {
+                userScore++;
+                document.getElementById('scoreDisplay').innerText = `Score: ${userScore}`;
+                alert('Correct Answer!');
+            } else {
+                alert('Wrong Answer!');
+            }
+        };
+    </script>
+</body>
+</html>

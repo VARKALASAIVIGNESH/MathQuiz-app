@@ -76,12 +76,17 @@ def submit_answer():
     question = data.get('question')
     user_answer = float(data.get('answer'))
     user = data.get('user')  # Get the user identifier
-    
+
     # Find the question and validate the answer
     for q in questions:
         if q['question'] == question:
             correct = q['answer'] == user_answer
-            scores[user] = scores.get(user, 0) + (1 if correct else 0)
+            # Update the score for the user
+            if correct:
+                scores[user] = scores.get(user, 0) + 1
+            else:
+                scores[user] = scores.get(user, 0)
+            # Return response with score and correctness status
             return jsonify({"correct": correct, "score": scores[user]}), 200
     
     return jsonify({"error": "Question not found"}), 404

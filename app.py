@@ -92,6 +92,7 @@ def submit_answer():
     return jsonify({"error": "Question not found"}), 404
 
 
+
 # Send a notification (using Firebase FCM)
 def send_notification():
     question_data = generate_question()
